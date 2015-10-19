@@ -1,3 +1,23 @@
+<?php
+    
+    $singleArticle = false;
+
+    $artikels = array(      array('titel' => 'Bisschoppen roepen op tot open grenzen en sterk onthaalbeleid voor vluchtelingen','paragraaf' => 'Vluchtelingen en gedwongen migranten hebben geen keuze. Zij zoeken veiligheid. Zij mogen niet gedwongen worden te liegen, een verhaal te verzinnen of van godsdienst te veranderen om beter onthaald te worden. De meest kwetsbare mensen moeten voorrang krijgen, niet de economisch meest rendabele mensen.','afbeeldingen' => 'foto1.jpg','afbeeldingExtra' => 'Vluchtelingen op reddingsboot','datum' => '13/10/2015'),
+                            array('titel' => 'DiCaprio plant film over VW-bedrog','paragraaf' => 'Volgens Hollywood Reporter hebben productiemaatschappijen Paramount en Appian Way, in handen van acteur DiCaprio, de rechten gekocht van het boek dat Jack Ewing gaat schrijven over het uitstootschandaal. Het boek, een precieze titel is er nog niet, ‘gaat onderzoeken hoe een filosofie van ‘alsmaar meer, alsmaar beter’ geleid heeft tot één van de grootste bedrijfsfraudes ooit','afbeeldingen' => 'foto2.jpg','afbeeldingExtra' => 'foto Leonardo Dicaprio','datum' => '13/10/2015'),
+                            array('titel' => 'Oceanen staan voor grootste koraalsterfte ooit','paragraaf' => 'Sinds 2014 verbleken koraalriffen in alle oceanen door een hittegolf onder water. Die is het gevolg van de opwarming van de aarde. Tegen het einde van dit jaar zullen 38 procent van de koraalriffen aangetast zijn. Zo’n vijf procent zal afgestorven zijn.','afbeeldingen' => 'foto3.jpg','afbeeldingExtra' => 'foto koraalrif','datum' => '08/10/2015'));
+
+
+    if(isset($_GET['key']))
+    {
+        $key = $_GET['key'];
+
+        if(array_key_exists($key, $artikels))
+        {
+            $artikels = array($artikels[$key]);
+            $singleArticle = true;
+        }
+    }
+?>
 <!doctype html>
 <html>
     <head>
@@ -72,6 +92,11 @@
                             {
                                 padding-left:6px;
                                 content:">";
+                            }
+
+                            img
+                            {
+                                max-width: 100%;
                             }
 
                         </style>
@@ -213,6 +238,29 @@
             </ul>
 
         </section>
+        <?php if($singleArticle): ?>
+            <title>Oplossing GET: Artikel <?php echo $artikels[0]['titel'] ?></title>
+        <?php else: ?>
+        <title>Oplossing GET</title>
+        <?php endif ?>
+
+        <?php foreach($artikels as $key => $artikel): ?>
+            <article class="<?php echo ($singleArticle) ? 'single': 'multiple' ; ?>">
+                <h1><?php echo $artikel['titel'] ?></h1>
+                <p><?php echo $artikel['datum'] ?></p>
+                <img src="img/<?php echo $artikel['afbeeldingen'] ?>" alt="<?php echo $artikel['afbeeldingExtra'] ?>">
+                <p>
+                        <?php if($singleArticle): ?>
+                            <?php echo($artikel["paragraaf"]) ?>
+                        <?php else : ?>
+                            <?php echo(substr($artikel["paragraaf"], 0, 100)) ?>
+                        <?php endif ?>
+                </p>
+                <?php if(!$singleArticle): ?>
+                    <a href="opdracht-get.php?key=<?php echo $key ?>">Lees meer</a>
+                <?php endif ?> 
+                </article>
+        <?php endforeach ?> 
 
     </body>
 </html>
