@@ -1,34 +1,48 @@
 <?php
-    $text = file_get_contents('gebruiker1.txt', FILE_USE_INCLUDE_PATH);
+    //$text = file_get_contents('gebruiker1.txt', FILE_USE_INCLUDE_PATH);
+    //$content = utf8_encode($text);
+    
+    $getUsers = file_get_contents('gebruikers.txt'); 
+    $contents = utf8_encode($getUsers); 
+    $usersAcc = json_decode($contents, true); 
 
-    $user1 = explode(',', $text);
+    $usernameMsg = "";
+
+    var_dump($usersAcc);
+
+    //$user1 = explode(',', $text);
 
     $errorLogin = "";
     $isLoggedIn = false;
 
     if(isset($_GET['logout']))
     {
-        setcookie('user1login',"",$cookieLifetime);
+        setcookie('userlogin',"",time()-3600);
         header('location: opdracht-cookies.php');
     }
 
-    if(!isset($_COOKIE['user1login']))
+    if(isset($_POST['submit']))
     {
-        if(isset($_POST['submit']))
+        foreach ($usersAcc as $key => $value) 
         {
-            if(isset($_POST['rememberMe']))
-            {
-                $cookieLifetime = time()*60*60*24*30; 
-            }
-            else
-            {
-                $cookieLifetime = time()*3600;
-            }
 
-            if($_POST['username'] == $user1[0]&&$_POST['password'] == $user1[1])
+            if($_POST['username'] == $value['username']&&$_POST['password'] == $value['password'])
             {
-                setcookie('user1login',true,$cookieLifetime);
+
+                if(isset($_POST['remember']))
+                {
+                    $cookieLifetime = time()*60*60*24*30; 
+                }
+                else
+                {
+                    $cookieLifetime = time()*3600;
+                }
+
+                setcookie('userlogin',true,$cookieLifetime);
                 header('location: opdracht-cookies.php');
+
+                //$usernameMsg = $usersAcc[$value]['username'];
+                //var_dump($usersAcc[$value]['username']);
             }
             else
             {
@@ -36,11 +50,18 @@
             }
         }
     }
-    else
+
+    if(isset($_COOKIE['userlogin']))
     {
         $isLoggedIn = true;
-        $errorLogin = "Logged in. Welcome {$user1[0]}!";
-    }
+        $usernameMsg = $usersAcc[$_COOKIE['userlogin']]['username'];
+        $errorLogin = "Logged in. Welcome {$usernameMsg}!";
+    }     
+    /*else
+    {
+        $isLoggedIn = true;
+        $errorLogin = "Logged in. Welcome {$usernameMsg}!";
+    }*/
 
 ?>
 <!doctype html>
@@ -77,7 +98,7 @@
                                 </li>
                                 <li>
                                     <label for="rememberMe">Remember Me</label>
-                                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                                    <input type="checkbox" id="remember" name="remember">
                                 </li>
                             </ul>
                             <input type="submit" name="submit">
