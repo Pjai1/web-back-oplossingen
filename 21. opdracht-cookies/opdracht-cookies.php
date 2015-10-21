@@ -6,7 +6,7 @@
     $contents = utf8_encode($getUsers); 
     $usersAcc = json_decode($contents, true); 
 
-    $usernameMsg = "";
+    //$usernameMsg = "";
 
     var_dump($usersAcc);
 
@@ -38,7 +38,7 @@
                     $cookieLifetime = time()*3600;
                 }
 
-                setcookie('userlogin',true,$cookieLifetime);
+                setcookie('userlogin',$key,$cookieLifetime);
                 header('location: opdracht-cookies.php');
 
                 //$usernameMsg = $usersAcc[$value]['username'];
