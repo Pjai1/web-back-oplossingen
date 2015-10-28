@@ -1,5 +1,5 @@
 <?php
-    function autoload($className)
+    /*function autoload($className)
     {
         $className = ltrim($className, '\\');
         $fileName  = '';
@@ -12,25 +12,21 @@
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 
         require $fileName;
+    }*/
+
+
+    function __autoload($className)
+    {
+        include 'classes/'.$className.'.php';
     }
-    spl_autoload_register('autoload');
+
+    //spl_autoload_register('__autoload'); niet nodig
+
+    $percent = new Percent(150,100);
 
     class Application
     {    
-        /*function __autoload($className)
-        {
-            include 'classes/'.$className.'.php';
-        }
 
-        function my_autoloader($class) {
-            include 'classes/' . $class . '.class.php';
-        }
-
-        //$percent = __autoload("Percent");
-        //$percent = new Percent();
-        spl_autoload_register('my_autoloader');*/
-
-        //var_dump($percent);
     }
 ?>
 <!doctype html>
@@ -70,19 +66,19 @@
                                 <tbody>
                                     <tr>
                                         <td>Absoluut</td>
-                                        <td></td>
+                                        <td><?= $percent->absolute ?></td>
                                     </tr>
                                     <tr>
                                         <td>Relatief</td>
-                                        <td></td>
+                                        <td><?= $percent->relative ?></td>
                                     </tr>
                                     <tr>
                                         <td>Geheel getal</td>
-                                        <td></td>
+                                        <td><?= $percent->hundred ?></td>
                                     </tr>
                                     <tr>
                                         <td>Nominaal</td>
-                                        <td></td>
+                                        <td><?= $percent->nominal ?></td>
                                     </tr>
                                 </tbody>
                             </table>

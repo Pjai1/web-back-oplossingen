@@ -9,28 +9,24 @@
 
         public function __construct($new,$unit)
         {
-            $absolute = $new/$unit;
-            $relative = $absolute - 1;
-            $hundred = $absolute*100;
+            $this->absolute = $this->formatNumber($new/$unit);
+            $this->relative = $this->formatNumber($this->absolute-1);
+            $this->hundred = $this->formatNumber($this->absolute*100);
 
-            if($nominal > 1)
+            if($this->absolute > 1)
             {
-                echo "positive";
+                $this->nominal = "positive";
             }
-            elseif($nominal < 1)
+
+            if($this->absolute < 1)
             {
-                echo "negative";
+                $this->nominal = "negative";
             }
-            elseif ($nominal == 1) 
+            
+            if ($this->absolute == 1) 
             {
-                echo "status-quo";
+                $this->nominal = "status-quo";
             }
-            /*
-            ($nominal > 1 ? "positive");
-            ($nominal < 1 ? "negative");
-            ($nominal == 1 ? "status-quo");
-            */
-            //echo 'Welcome '.($user['is_logged_in'] ? $user['first_name'] : 'Guest').'!';
         }
 
         public function formatNumber($number)
@@ -40,7 +36,7 @@
     }
 
 ?>
-<!doctype html>
+<!--<!doctype html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -58,4 +54,4 @@
             
         </section>
     </body>
-</html>
+</html>!-->
