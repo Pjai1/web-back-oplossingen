@@ -1,6 +1,16 @@
 <?php
+
     session_start();
+
+    function __autoload($className)
+    {
+        include 'classes/'.$className.'.php';
+    } 
+
+    $messageClass = new Message();
+
     $isValid = false;
+
     try
     {
         if(isset($_POST['submit']))
@@ -27,50 +37,60 @@
         $messageCode = $e->getMessage();//methode om de Exception message te pakken te krijgen
         $message = array();
         $createMessage = false;
+
         switch ($messageCode) 
         {
             case 'SUBMIT-ERROR':
                 $message['type'] = 'error';
                 $message['text'] = 'Het juiste veld ontbreekt';
                 break;
+
             case 'VALIDATION-CODE-LENGTH':
                 $message['type'] = 'error';
                 $message['text'] = 'De kortingscode heeft niet de juiste lengte';  
                 $createMessage = true;  
                 break;
         }
+
         if($createMessage)
         {
-            createMessage($message);
+            $messageClass->getMessage($message);
         }
+
         logToFile($message);
     } 
-    $message = showMessage();
-    function createMessage($message)
+
+    $message = $messageClass->setMessage();
+
+    /*function createMessage($message)
     {
         $_SESSION['message']['type'] = $message['type'];
         $_SESSION['message']['message'] = $message['text'];
-    }
-    function showMessage()
+    }*/
+
+    /*function showMessage()
     {
         if(isset($_SESSION['message']))
         {
             $type = $_SESSION["message"]["type"];
             $message = $_SESSION["message"]["message"];
             unset($_SESSION['message']);
+
             return $type.": ".$message;
         }
         else
         {
             return false;
         }
-    }
+    }*/
+
     function logToFile($input)
     {
         $errorMessage = '['.date('H:i:s',time()).']'.' - '.$_SERVER['REMOTE_ADDR'].' - type:['.$input['type'].'] '.$input['text']."\n\r";
     
         file_put_contents('log.txt', $errorMessage, FILE_APPEND);
     }
+
 ?>
 <!doctype html>
 <html>
@@ -86,9 +106,9 @@
         
         <section class="body">
         
-            <h1>Opdracht error handling: try catch: deel 1</h1>
+			<h1>Opdracht error handling: try catch: deel 1</h1>
 
-            <ul>
+			<ul>
                     <div class="facade-minimal" data-url="http://www.app.local/application.php">
                         <h1>Geef uw kortingscode op</h1>
                         <?php if($message): ?>
@@ -109,8 +129,8 @@
                         <?= "Korting aanvaard" ?>
                     <?php endif ?>    
                     </div>
-            </ul>
-        </section>
+			</ul>
+		</section>
 
     </body>
 </html>

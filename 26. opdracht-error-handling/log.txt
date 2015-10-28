@@ -25,4 +25,14 @@
 [01:20:29] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
 [01:20:31] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
 [01:20:36] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[07:58:35] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[07:58:42] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[07:58:45] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[07:58:49] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[08:01:11] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[08:01:16] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[08:18:40] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[08:18:43] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[08:30:20] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
+[08:30:28] - 127.0.0.1 - type:[error] De kortingscode heeft niet de juiste lengte
 
