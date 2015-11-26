@@ -1,14 +1,14 @@
 <?php
-    
-    //session_start();
 
     $messageContainer = "";
 
+    $geselecteerdeBrouwer = false;
+
     try
     {
-        $db = new PDO('mysql:host=localhost;dbname=bieren', 'root', '', array (PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); // Connectie maken
+        $db = new PDO('mysql:host=localhost;dbname=bieren', 'root', ''); // Connectie maken
    
-        $brouwerQueryString = 'SELECT brouwers.brouwernr,brouwers.brnaam FROM brouwers';
+        $brouwerQueryString = 'SELECT brouwernr,brnaam FROM brouwers';
 
         $brouwerStatement = $db->prepare($brouwerQueryString);
 
@@ -23,11 +23,13 @@
 
         if(isset($_GET['brouwernr']))
         {
-            $bierenQueryString = 'SELECT bieren.brnaam FROM bieren WHERE bieren.brouwernr = :brouwernr';
+            $geselecteerdeBrouwer = $_GET['brouwernr'];
+
+            $bierenQueryString = 'SELECT bieren.naam FROM bieren WHERE bieren.brouwernr = :brouwernr';
 
             $bierenStatement = $db->prepare($bierenQueryString);
 
-            $bierenStatement->bindValue(':brouwernr',$_GET['brouwernr']);
+            $bierenStatement->bindParam(':brouwernr',$_GET['brouwernr']);
         }
         else
         {
@@ -38,11 +40,19 @@
 
         $bierenStatement->execute();
 
-        $bierenNaam = array();
+        $bierenHeader   =   array();
+        $bierenHeader[] =   'Aantal';
+
+        for ($columnNumber = 0; $columnNumber  < $bierenStatement->columnCount( );  ++$columnNumber) 
+        { 
+            $bierenHeader[] = $bierenStatement->getColumnMeta( $columnNumber )['name'];
+        }
+
+        $fetchAssoc = array();
 
         while($row = $bierenStatement->fetch(PDO::FETCH_ASSOC))
         {
-            $bierenNaam[] = $row;
+            $fetchAssoc[] = $row['naam'];
         }
     }
     catch(PDOException $e)
@@ -109,24 +119,27 @@
                    
                                 <h1>Overzicht van de bieren</h1>
 
-                                <form action="opdracht-crud-query-deel2.php" method="GET">
+                                <form action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
                                     <select name="brouwernr">
                                         <?php foreach($brouwerNaam as $id => $brouwers): ?>
-                                            <option value="<?= $brouwers['brouwernr'] ?>"><?= $brouwers['brnaam']?></option>
+                                            <option value="<?= $brouwers['brouwernr'] ?>"<?= ($geselecteerdeBrouwer == $brouwers['brouwernr']) ? 'selected' : ''?>><?=$brouwers['brnaam']?></option>
                                         <?php endforeach ?>     
                                     </select>
                                     <input type="submit">     
                                 </form>
                                 <table>
                                     <thead>
-                                        <th>Aantal</th>
-                                        <th>naam</th>
+                                        <?php foreach ($bierenHeader as $columnName): ?>
+                                            <th><?= $columnName ?></th>
+                                        <?php endforeach ?> 
                                     </thead>
                                     <tbody>
-                                        <?php foreach($bierenNaam as $id => $bieren): ?>
+                                    <?= var_dump($fetchAssoc) ?>
+                                        <?php foreach($fetchAssoc as $id => $bieren): ?>
                                                 <tr class="<?php echo (($id+1)%2==0) ? '' : 'odd' ; ?>">
                                                     <td>
-                                                        <?php echo $id ?> 
+
+                                                        <?php echo ($id+1) ?> 
                                                     </td>     
                                                     <td>
                                                          <?php echo $bieren ?>
