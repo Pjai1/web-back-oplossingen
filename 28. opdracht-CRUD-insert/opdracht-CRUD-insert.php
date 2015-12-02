@@ -19,21 +19,21 @@
         {
             $db = new PDO('mysql:host=localhost;dbname=bieren', 'root', '');
 
-            $brouwerQueryString = 'INSERT INTO `brouwers`(`brnaam`, `adres`, `postcode`, `gemeente`, `omzet`) VALUES (:brnaam,:adres,:postcode,:gemeente,:omzet)';
+            $brouwerQueryString = 'INSERT INTO `brouwers`(`brnaam`, `adres`, `postcode`, `gemeente`, `omzet`) Values (:brnaam,:adres,:postcode,:gemeente,:omzet)';
 
             $brouwerStatement = $db->prepare($brouwerQueryString);
 
-            $brouwerStatement->bindValue(':brnaam',$_POST['brouwernaam']);
-            $brouwerStatement->bindValue(':adres',$_POST['adres']);
-            $brouwerStatement->bindValue(':postcode',$_POST['postcode']);
-            $brouwerStatement->bindValue(':gemeente',$_POST['gemeente']);
-            $brouwerStatement->bindValue(':omzet',$_POST['omzet']);
+            $brouwerStatement->bindParam(':brnaam',$_POST['brouwernaam']);
+            $brouwerStatement->bindParam(':adres',$_POST['adres']);
+            $brouwerStatement->bindParam(':postcode',$_POST['postcode']);
+            $brouwerStatement->bindParam(':gemeente',$_POST['gemeente']);
+            $brouwerStatement->bindParam(':omzet',$_POST['omzet']);
 
             $brouwerStatement->execute();
 
             $brouwerStatementId = $db->lastInsertId();
 
-            $messageContainer = 'Brouwerij succesvol toegevoegd. Het unieke nummer van deze brouwerij is'.$brouwerStatementId;
+            $messageContainer = 'Brouwerij succesvol toegevoegd. Het unieke nummer van deze brouwerij is '.$brouwerStatementId;
             $isAMessage = true;
         }
         catch(PDOException $e)
