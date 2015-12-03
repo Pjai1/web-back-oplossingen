@@ -21,22 +21,6 @@
 
         $statement->execute();
 
-
-        $fetchRow = array();
-
-        while($row = $statement->fetch())
-        {
-            $fetchRow[] = $row;
-        }
-
-        $statement->execute();
-
-        $fetchBoth = array();
-
-        while($row = $statement->fetch(PDO::FETCH_BOTH))
-        {
-            $fetchBoth[] = $row;
-        }
     }
     catch(PDOException $e)
     {

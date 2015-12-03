@@ -119,7 +119,7 @@
                    
                                 <h1>Overzicht van de bieren</h1>
 
-                                <form action="<?= $_SERVER['PHP_SELF'] ?>" method="GET">
+                                <form action="opdracht-crud-query-deel2.php" method="GET">
                                     <select name="brouwernr">
                                         <?php foreach($brouwerNaam as $id => $brouwers): ?>
                                             <option value="<?= $brouwers['brouwernr'] ?>"<?= ($geselecteerdeBrouwer == $brouwers['brouwernr']) ? 'selected' : ''?>><?=$brouwers['brnaam']?></option>
@@ -134,7 +134,7 @@
                                         <?php endforeach ?> 
                                     </thead>
                                     <tbody>
-                                    <?= var_dump($fetchAssoc) ?>
+                                    
                                         <?php foreach($fetchAssoc as $id => $bieren): ?>
                                                 <tr class="<?php echo (($id+1)%2==0) ? '' : 'odd' ; ?>">
                                                     <td>

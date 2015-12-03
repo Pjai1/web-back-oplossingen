@@ -3,14 +3,34 @@
 session_start();
 
     $messageContainer = "";
+    $confirmationMessage = false;
 
- if(isset($_POST['submit']))
-    {
+ 
         try
         {
-            $db = new PDO('mysql:host=localhost;dbname=bieren', 'root', '',array (PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $db = new PDO('mysql:host=localhost;dbname=bieren', 'root', '');
 
-            $brouwerQueryString = 'SELECT * FROM brouwers';
+            if(isset($_POST['submit']))
+            {
+                $deleteBrouwer = $_POST['submit'];
+                $confirmationMessage = true;
+                $deleteMessage = "Wilt u deze record verwijderen?";
+            }
+
+            if(isset($_POST['submitDelete']))
+            {
+                    $brouwerDeleteQuery = 'DELETE FROM `brouwers` WHERE brouwernr = :brouwernr';
+                    $brouwerDeleteStatement = $db->prepare($brouwerDeleteQuery);
+
+                    $brouwerDeleteStatement->bindParam(':brouwernr',$_POST['submitDelete']);
+
+                    $brouwerDeleteStatement->execute();
+                    $confirmationMessage = false;
+                    $deleteMessage = "Brouwer verwijderd";
+            }
+
+
+            $brouwerQueryString = 'SELECT * FROM `brouwers`';
             $brouwerStatement = $db->prepare($brouwerQueryString);
 
             $brouwerStatement->execute();
@@ -23,28 +43,11 @@ session_start();
             }
 
             $brouwerStatement->execute();
-
-            $fetchBrouwersRow = array();
-
-            while($row = $brouwerStatement->fetch())
-            {
-                $fetchBrouwersRow[] = $row;
-            } 
-
-            $brouwerStatement->execute();
-
-            $fetchBoth = array();
-
-            while ($row = $brouwerStatement->fetch(PDO::FETCH_BOTH)) 
-            {
-                $fetchBoth[] = $row;
-            }
         }
         catch(PDOException $e)
         {
             $messageContainer = 'Er ging iets mis: '.$e->getMessage();
         }
-    }
    
 
 ?>
@@ -118,11 +121,31 @@ session_start();
                 height:16px;
                 background: url("http://web-backend.local/img/icon-delete.png") no-repeat;
             }
+
+            .modal {
+                margin: 5px 0px;
+                padding: 5px;
+                border-radius: 5px;
+            }
+
+            .error {
+                color: #b94a48;
+                background-color: #f2dede;
+                border: 1px solid #eed3d7;
+            }
         </style>
         
         <section class="body">
             
-            <h1>Opdracht CRUD delete: deel 1</h1>
+            <h1>Opdracht CRUD delete: deel 1&2</h1>
+            <?php if($confirmationMessage): ?>
+                <div class"modal error"><?= $deleteMessage ?>
+                    <form action="opdracht-CRUD-delete.php" method="post">
+                        <button type="submit" name="submitDelete" value="<?= $deleteBrouwer ?>">Ja</button>
+                        <button type="submit">Nee</button>
+                    </form>
+                </div>
+            <?php endif ?>    
 
                 <form action="opdracht-CRUD-delete.php" method="post">
                                     <div class="facade-minimal voorbeeld-query-01" data-url="http://www.app.local/index.php">
@@ -155,7 +178,7 @@ session_start();
                                                             </td>
                                                         <?php endforeach ?>
                                                         <td>
-                                                            <button type="submit" name="submit" class="delete"></button>
+                                                            <button type="submit" name="submit" class="delete" value="<?= $brouwers['brouwernr'] ?>"></button>
                                                         </td>
                                                     </tr>
                                                 <?php endforeach ?>    
