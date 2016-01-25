@@ -32,18 +32,21 @@ Route::group(['middleware' => ['web']], function () {
 	    return view('home');
 	});
 
+	//Authentication & Registration Routing
+	Route::auth();
 
 	// ToDo Routes
 	Route::get('/tasks', 'ToDoController@index');
 	Route::post('/task', 'ToDoController@store');
 	Route::delete('/task/{task}', 'ToDoController@destroy');
+	Route::get('/task/toggle/{task}', 'ToDoController@toggleDone');
 
 	// Authentication Routes...
-	Route::get('/login', 'Auth\AuthController@getLogin');
+	/*Route::get('/login', 'Auth\AuthController@getLogin');
 	Route::post('/login', 'Auth\AuthController@postLogin');
 	Route::get('/logout', 'Auth\AuthController@getLogout');
 
 	// Registration Routes...
 	Route::get('/register', 'Auth\AuthController@getRegister');
-	Route::post('/register', 'Auth\AuthController@postRegister');
+	Route::post('/register', 'Auth\AuthController@postRegister');*/
 });

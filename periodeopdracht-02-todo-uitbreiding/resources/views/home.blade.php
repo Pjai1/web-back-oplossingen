@@ -8,7 +8,7 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-                    You are logged in!
+                    Do you wish to proceed to your <a href="{{ url('/tasks') }}">ToDos?</a>
                 </div>
             </div>
         </div>

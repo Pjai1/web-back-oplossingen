@@ -39,16 +39,48 @@ class ToDoController extends Controller
         'name' => $request->name,
 	    ]);
 
-	    return redirect('/tasks');
+	    $name = $request->name;
+
+	    //return redirect('/tasks');
+	    return view('tasks.index', [
+            'tasks' => $this->tasks->forUser($request->user()),
+            'message' => sprintf('ToDo %s has been added',$name),
+        ]);
 	}
 
 	//delete Todo
 	public function destroy(Request $request, Todo $task)
 	{
 	    $this->authorize('destroy', $task);
-	
+		
+	    $name = $task->name;
+
 		$task->delete();
 
-		return redirect('/tasks');
+		//return redirect('/tasks');
+		return view('tasks.index', [
+            'tasks' => $this->tasks->forUser($request->user()),
+            'message' => sprintf('ToDo %s has been deleted',$name),
+        ]);
+	}
+
+	public function toggleDone(Request $request, Todo $task)
+	{
+		$name = $task->name;
+
+		$task->done = $task->done === 0 ? 1 : 0;
+
+		$task->save();
+
+		if($task->done==0)
+		{
+			return redirect('/tasks');
+		}
+		
+		//return redirect('/tasks');
+		return view('tasks.index', [
+            'tasks' => $this->tasks->forUser($request->user()),
+            'message' => sprintf('ToDo %s has been completed',$name),
+        ]);
 	}
 }
